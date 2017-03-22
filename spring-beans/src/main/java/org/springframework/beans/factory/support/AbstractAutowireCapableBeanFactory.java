@@ -417,7 +417,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	@Override
 	public Object applyBeanPostProcessorsAfterInitialization(Object existingBean, String beanName)
 			throws BeansException {
-
+//这里对设置好的BeanPostProcessors的PostProcessorsAfterInitialization回调进行依次调用的地方
 		Object result = existingBean;
 		for (BeanPostProcessor beanProcessor : getBeanPostProcessors()) {
 			result = beanProcessor.postProcessAfterInitialization(result, beanName);
@@ -559,6 +559,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			//进入
 			populateBean(beanName, mbd, instanceWrapper);
 			if (exposedObject != null) {
+//				进入，在完成Bean的生成和依赖注入以后，开始对bean的初始化，这个初始化过程包含了对后置处理器POSTProcessBeforeInitialize的回调
 				exposedObject = initializeBean(beanName, exposedObject, mbd);
 			}
 		}
@@ -1464,6 +1465,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	 * @param pds the relevant property descriptors for the target bean
 	 * @param pvs the property values to be applied to the bean
 	 * @see #isExcludedFromDependencyCheck(java.beans.PropertyDescriptor)
+	 * bean依赖检查
 	 */
 	protected void checkDependencies(
 			String beanName, AbstractBeanDefinition mbd, PropertyDescriptor[] pds, PropertyValues pvs)
@@ -1633,13 +1635,14 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		else {
 			invokeAwareMethods(beanName, bean);
 		}
-
+//		这里是对后置处理器BeanPostProcessors的PostProcessorsBeforeInitialization的回调方法的调用
 		Object wrappedBean = bean;
 		if (mbd == null || !mbd.isSynthetic()) {
 			wrappedBean = applyBeanPostProcessorsBeforeInitialization(wrappedBean, beanName);
 		}
 
 		try {
+//			调用Bean的初始化方法
 			invokeInitMethods(beanName, wrappedBean, mbd);
 		}
 		catch (Throwable ex) {
@@ -1647,7 +1650,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 					(mbd != null ? mbd.getResourceDescription() : null),
 					beanName, "Invocation of init method failed", ex);
 		}
-
+//		这里是对后置处理器BeanPOSTProcessors的postProcessAfterInitialization的回调的方法调用
 		if (mbd == null || !mbd.isSynthetic()) {
 			wrappedBean = applyBeanPostProcessorsAfterInitialization(wrappedBean, beanName);
 		}

@@ -623,6 +623,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * Configure the factory's standard context characteristics,
 	 * such as the context's ClassLoader and post-processors.
 	 * @param beanFactory the BeanFactory to configure
+	 * Bean容器初始化
 	 */
 	protected void prepareBeanFactory(ConfigurableListableBeanFactory beanFactory) {
 		// Tell the internal bean factory to use the context's class loader etc.
@@ -982,6 +983,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * @see #destroyBeans()
 	 * @see #close()
 	 * @see #registerShutdownHook()
+	 * Bean容器关闭
 	 */
 	protected void doClose() {
 		if (this.active.get() && this.closed.compareAndSet(false, true)) {
@@ -992,14 +994,14 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			LiveBeansView.unregisterApplicationContext(this);
 
 			try {
-				// Publish shutdown event.
+				// Publish shutdown event.发布容器关闭信号
 				publishEvent(new ContextClosedEvent(this));
 			}
 			catch (Throwable ex) {
 				logger.warn("Exception thrown from ApplicationListener handling ContextClosedEvent", ex);
 			}
 
-			// Stop all Lifecycle beans, to avoid delays during individual destruction.
+			// Stop all Lifecycle beans, to avoid delays during individual destruction.关闭活着的bean
 			try {
 				getLifecycleProcessor().onClose();
 			}
@@ -1007,10 +1009,10 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				logger.warn("Exception thrown from LifecycleProcessor on context close", ex);
 			}
 
-			// Destroy all cached singletons in the context's BeanFactory.
+			// Destroy all cached singletons in the context's BeanFactory.清除单例缓存
 			destroyBeans();
 
-			// Close the state of this context itself.
+			// Close the state of this context itself.关闭BeanFactory
 			closeBeanFactory();
 
 			// Let subclasses do some final clean-up if they wish...
