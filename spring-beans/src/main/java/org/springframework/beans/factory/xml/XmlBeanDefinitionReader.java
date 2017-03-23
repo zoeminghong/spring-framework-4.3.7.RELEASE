@@ -335,7 +335,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 				if (encodedResource.getEncoding() != null) {
 					inputSource.setEncoding(encodedResource.getEncoding());
 				}
-//				进入，具体读取过程都是这这个方法中完成，是特定的XML实际载入的BeanDefinition的地方
+//				进入，具体读取过程都是在这个方法中完成，是特定的XML实际载入的BeanDefinition的地方
 				return doLoadBeanDefinitions(inputSource, encodedResource.getResource());
 			}
 			finally {
@@ -393,7 +393,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 		try {
 //			读取XML文件获取Document对象，这个过程是有documentLoader完成
 			Document doc = doLoadDocument(inputSource, resource);
-//			这是是对BeanDefinition解析的详细过程，这个解析会使用到Spring的Bean配置规则
+//			这是对BeanDefinition解析的详细过程，这个解析会使用到Spring的Bean配置规则
 			return registerBeanDefinitions(doc, resource);
 		}
 		catch (BeanDefinitionStoreException ex) {

@@ -858,8 +858,8 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 					}
 				}
 			}
-//			这是正常注册BeanDefinition的过程，把Bean的名字存入到BeanDefinitionNames的同时，吧beanName作为map的key，
-//			吧BeanDefinition作为value存入到ioc容器持有的BeanDefinitionMap中去
+//			这是正常注册BeanDefinition的过程，把Bean的名字存入到BeanDefinitionNames的同时，把beanName作为map的key，
+//			把BeanDefinition作为value存入到ioc容器持有的BeanDefinitionMap中去
 			else {
 				// Still in startup registration phase
 				this.beanDefinitionMap.put(beanName, beanDefinition);
