@@ -40,15 +40,19 @@ public class MethodBeforeAdviceInterceptor implements MethodInterceptor, Seriali
 	/**
 	 * Create a new MethodBeforeAdviceInterceptor for the given advice.
 	 * @param advice the MethodBeforeAdvice to wrap
+	 * 为指定的Advice创建对应的MethodBeforeAdviceInterceptor对象
 	 */
 	public MethodBeforeAdviceInterceptor(MethodBeforeAdvice advice) {
 		Assert.notNull(advice, "Advice must not be null");
 		this.advice = advice;
 	}
-
+//	这个invoke方法是拦截器的回调方法，会在代理对象的方法被调用是触发回调
+//	与AfterReturningAdviceInterceptor中的进行对比
 	@Override
 	public Object invoke(MethodInvocation mi) throws Throwable {
+		//首先触发before回调
 		this.advice.before(mi.getMethod(), mi.getArguments(), mi.getThis() );
+		//MethodInvocation的proceed
 		return mi.proceed();
 	}
 

@@ -35,6 +35,7 @@ public abstract class GlobalAdvisorAdapterRegistry {
 	 * Return the singleton {@link DefaultAdvisorAdapterRegistry} instance.
 	 */
 	public static AdvisorAdapterRegistry getInstance() {
+//		返回的是DefaultAdvisorAdapterRegistry
 		return instance;
 	}
 

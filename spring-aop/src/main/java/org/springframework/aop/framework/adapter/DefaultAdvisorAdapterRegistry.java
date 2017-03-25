@@ -39,14 +39,17 @@ import org.springframework.aop.support.DefaultPointcutAdvisor;
  */
 @SuppressWarnings("serial")
 public class DefaultAdvisorAdapterRegistry implements AdvisorAdapterRegistry, Serializable {
-
+//	持有一个AdvisorAdapter的list，这个List中Adapter是与实现，Spring AOP的advice增强功能相对应的
 	private final List<AdvisorAdapter> adapters = new ArrayList<AdvisorAdapter>(3);
 
 
 	/**
 	 * Create a new DefaultAdvisorAdapterRegistry, registering well-known adapters.
+	 * 这里把已有的advice实现的adapter加入进来，有非常熟悉的MethodBeforeAdvice。、AfterReturningAdvice、ThrowsAdvice
+	 * 这些AOP的advice封装实现
 	 */
 	public DefaultAdvisorAdapterRegistry() {
+//		进入MethodBeforeAdviceAdapter
 		registerAdvisorAdapter(new MethodBeforeAdviceAdapter());
 		registerAdvisorAdapter(new AfterReturningAdviceAdapter());
 		registerAdvisorAdapter(new ThrowsAdviceAdapter());
@@ -74,14 +77,18 @@ public class DefaultAdvisorAdapterRegistry implements AdvisorAdapterRegistry, Se
 		}
 		throw new UnknownAdviceTypeException(advice);
 	}
-
+//	这里是在DefaultAdvisorChainFactory中启动的getInterceptors方法
 	@Override
 	public MethodInterceptor[] getInterceptors(Advisor advisor) throws UnknownAdviceTypeException {
 		List<MethodInterceptor> interceptors = new ArrayList<MethodInterceptor>(3);
+//		从advisor通知器配置中取得advice通知
 		Advice advice = advisor.getAdvice();
+//		如果通知是MethodInterceptor类型的通知，直接加入interceptors的List中，不需要适配
 		if (advice instanceof MethodInterceptor) {
 			interceptors.add((MethodInterceptor) advice);
 		}
+//		对通知进行适配，使用已经配置好的Adapter：MethodBeforeAdviceAdapter，AfterReturningAdviceAdapter以及ThrowsAdviceAdapter
+//		然后从对应的Adapter中取出封装好Aop编织功能的拦截器
 		for (AdvisorAdapter adapter : this.adapters) {
 			if (adapter.supportsAdvice(advice)) {
 				interceptors.add(adapter.getInterceptor(advisor));
