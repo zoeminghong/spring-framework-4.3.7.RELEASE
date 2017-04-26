@@ -128,6 +128,7 @@ public abstract class FactoryBeanRegistrySupport extends DefaultSingletonBeanReg
 			Object object = doGetObjectFromFactoryBean(factory, beanName);
 			if (object != null && shouldPostProcess) {
 				try {
+					//applyBeanPostProcessorsAfterInitialization
 					object = postProcessObjectFromFactoryBean(object, beanName);
 				}
 				catch (Throwable ex) {

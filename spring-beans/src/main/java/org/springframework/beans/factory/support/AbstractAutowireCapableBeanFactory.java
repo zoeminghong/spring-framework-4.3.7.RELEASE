@@ -471,7 +471,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
 		try {
 			// Give BeanPostProcessors a chance to return a proxy instead of the target bean instance.
-//			如果Bean配置了PostProcessor，那么这里返回的是一个proxy
+//			如果Bean配置了PostProcessor，那么这里返回的是一个proxy,进行applyBeanPostProcessorsBeforeInstantiation
 			Object bean = resolveBeforeInstantiation(beanName, mbdToUse);
 			if (bean != null) {
 				return bean;
@@ -556,7 +556,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 //		这里进行Bean的初始化，依赖注入往往从这里开始，exposedObject在初始化处理完成以后会返回一个依赖注入完成后的Bean
 		Object exposedObject = bean;
 		try {
-			//进入
+			//进入，属性注入
 			populateBean(beanName, mbd, instanceWrapper);
 			if (exposedObject != null) {
 //				进入，在完成Bean的生成和依赖注入以后，开始对bean的初始化，这个初始化过程包含了对后置处理器POSTProcessBeforeInitialize的回调
@@ -1016,8 +1016,10 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			if (!mbd.isSynthetic() && hasInstantiationAwareBeanPostProcessors()) {
 				Class<?> targetType = determineTargetType(beanName, mbd);
 				if (targetType != null) {
+//					bean实例化前对bean的处理操作，和实例化bean，进入
 					bean = applyBeanPostProcessorsBeforeInstantiation(targetType, beanName);
 					if (bean != null) {
+//						bean实例化操作完成以后进行处理操作
 						bean = applyBeanPostProcessorsAfterInitialization(bean, beanName);
 					}
 				}
@@ -1042,6 +1044,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		for (BeanPostProcessor bp : getBeanPostProcessors()) {
 			if (bp instanceof InstantiationAwareBeanPostProcessor) {
 				InstantiationAwareBeanPostProcessor ibp = (InstantiationAwareBeanPostProcessor) bp;
+//				存在实例化bean操作，进入
 				Object result = ibp.postProcessBeforeInstantiation(beanClass, beanName);
 				if (result != null) {
 					return result;
@@ -1107,6 +1110,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		}
 
 		// No special handling: simply use no-arg constructor.
+//		没有特别的处理，没有构造函数实例化
 		return instantiateBean(beanName, mbd);
 	}
 

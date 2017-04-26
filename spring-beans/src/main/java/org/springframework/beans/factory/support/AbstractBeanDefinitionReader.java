@@ -234,6 +234,7 @@ public abstract class AbstractBeanDefinitionReader implements EnvironmentCapable
 		else {
 			// Can only load single resources by absolute URL.
 			Resource resource = resourceLoader.getResource(location);
+			//进入
 			int loadCount = loadBeanDefinitions(resource);
 			if (actualResources != null) {
 				actualResources.add(resource);
@@ -250,6 +251,7 @@ public abstract class AbstractBeanDefinitionReader implements EnvironmentCapable
 		Assert.notNull(locations, "Location array must not be null");
 		int counter = 0;
 		for (String location : locations) {
+			//进入
 			counter += loadBeanDefinitions(location);
 		}
 		return counter;

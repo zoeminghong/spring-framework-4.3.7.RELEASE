@@ -134,6 +134,7 @@ public class ClassPathXmlApplicationContext extends AbstractXmlApplicationContex
 			throws BeansException {
 
 		super(parent);
+		/*完成xml文件的路径读取，并保存到configLocation中*/
 		setConfigLocations(configLocations);
 		if (refresh) {
 			refresh();
